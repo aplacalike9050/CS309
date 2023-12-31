@@ -42,9 +42,9 @@ body, html {
 
 
 .main-content {
-    max-width: 1000px; /* 或您需要的任何宽度 */
-    margin: 0 auto; /* 这会居中.main-content */
-    padding: 25px; /* 您可能需要一些内边距 */
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 25px;
 }
 
 .content-section {
