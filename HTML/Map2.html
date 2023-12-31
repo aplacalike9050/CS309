@@ -40,20 +40,41 @@
 </style>
 
 <script type="module">
-    import { Layer1_1 , Layer1_2 , Layer1_3 } from '../JS/TeachingBuilding.js';
-    import {Layer2_1 , Layer2_2 , Layer2_3} from '../JS/Dormitory.js'
+    import { Layer1_1 , Layer1_2 , Layer1_3 ,
+
+        Source1_1,Layer1_1_L,Source1_2,Layer1_2_L,Source1_3,Layer1_3_L,} from '../JS/TeachingBuilding.js';
+    import {Layer2_1 , Layer2_2 , Layer2_3,
+        Layer2_4 , Layer2_5 , Layer2_6,
+        Layer2_7 , Layer2_8 , Layer2_9,
+        Layer2_10 , Layer2_11 , Layer2_12,
+        Layer2_13 , Layer2_14 , Layer2_15,
+        Layer2_16 , Layer2_17 , Layer2_18,
+        Layer2_19 ,
+        Source2_1,Layer2_1_L,Source2_2,Layer2_2_L,Source2_3,Layer2_3_L,} from '../JS/Dormitory.js'
     import {Layer3_1 , Layer3_2 , Layer3_3,
         Layer3_4_1 , Layer3_4_2 , Layer3_4_3,
-        Layer3_5 , Layer3_6 , Layer3_7, Layer3_8,Layer3_9,Source1,Layer3_1_L,Source2,Layer3_2_L,Source3,Layer3_3_L} from '../JS/Canteen.js';
+        Layer3_5 , Layer3_6 , Layer3_7, Layer3_8,Layer3_9,
+        Source3_1,Layer3_1_L,Source3_2,Layer3_2_L,Source3_3,Layer3_3_L,
+        Source3_4,Layer3_4_L,Source3_5,Layer3_5_L,Source3_6,Layer3_6_L,
+        Source3_7,Layer3_7_L,Source3_8,Layer3_8_L,Source3_9,Layer3_9_L} from '../JS/Canteen.js';
     import { Layer4_1,Layer4_2,Layer4_3,
         Layer4_4,Layer4_5,Layer4_6,
-        Layer4_7,Layer4_8,Layer4_9 } from '../JS/College.js';
+        Layer4_7,Layer4_8,Layer4_9,
+        Source4_1,Layer4_1_L,Source4_2,Layer4_2_L,Source4_3,Layer4_3_L,
+        Source4_4,Layer4_4_L,Source4_5,Layer4_5_L,Source4_6,Layer4_6_L,
+        Source4_7,Layer4_7_L,Source4_8,Layer4_8_L,Source4_9,Layer4_9_L,} from '../JS/College.js';
     import {Layer5_1,Layer5_2,Layer5_3,
-        Layer5_4,Layer5_5,Layer5_6} from '../JS/Gym.js';
-    import {Layer6_1,Layer6_2,Layer6_3,} from '../JS/Library.js';
+        Layer5_4,Layer5_5,Layer5_6,
+        Source5_1,Layer5_1_L,Source5_2,Layer5_2_L,Source5_3,Layer5_3_L,
+        Source5_4,Layer5_4_L,Source5_5,Layer5_5_L,Source5_6,Layer5_6_L,} from '../JS/Gym.js';
+    import {Layer6_1,Layer6_2,Layer6_3,
+        Source6_1,Layer6_1_L,Source6_2,Layer6_2_L,Source6_3,Layer6_3_L,} from '../JS/Library.js';
     import {Layer7_1,Layer7_2,Layer7_3,
         Layer7_4,Layer7_5,Layer7_6,
-        Layer7_7,Layer7_8} from '../JS/Other.js';
+        Layer7_7,Layer7_8,
+        Source7_1,Layer7_1_L,Source7_2,Layer7_2_L,Source7_3,Layer7_3_L,
+        Source7_4,Layer7_4_L,Source7_5,Layer7_5_L,Source7_6,Layer7_6_L,
+        Source7_7,Layer7_7_L,Source7_8,Layer7_8_L} from '../JS/Other.js';
 
 
 
@@ -61,9 +82,53 @@
     mapboxgl.accessToken = 'pk.eyJ1Ijoia2lkNDU2IiwiYSI6ImNsbzE5bDhicTFsNTQyam1jOGpiM2o5dGkifQ.83sSyCg3T5yBZi6qvmgqBA';
 
     var buildings = {
-        '中心餐厅': [113.99285, 22.59963],
-        '湖畔餐厅': [113.99251, 22.60025],
-        '九栋餐厅': [113.99371, 22.60477],
+        //1
+        '一教': [113.99220,22.59926],
+        '二教': [113.99164,22.59770],
+        '三教': [113.99501,22.59945],
+        //2
+        '九华精舍': [113.99444,22.60319],
+        '教师公寓': [113.99701,22.60293],
+        '学生宿舍': [113.99393,22.60501],
+        //3
+        '湖畔餐厅': [113.99260,22.59980],
+        '中心餐厅': [113.99290,22.60087],
+        '西餐厅': [113.99739,22.60261],
+        '天虹超市': [113.99484,22.60448],
+        '湖畔超市': [113.99367,22.60312],
+        '荔园餐厅': [113.99437,22.60791],
+        '荔园超市': [113.99444,22.60752],
+        '欣园餐厅': [ 113.99685,22.61070],
+        //4
+        '理学院西': [113.99044,22.59775],
+        '第二科研楼': [113.99079,22.59898],
+        '第一科研楼': [113.99171,22.59960],
+        '理学院东': [113.99433,22.59791],
+        '商学院': [113.99568,22.59904],
+        '工学院北': [113.99027,22.60450],
+        '工学院南': [113.99041,22.60327],
+        '人文社科学院': [113.99657,22.60064],
+        //5
+        '风雨操场': [113.99457,22.60206],
+        '松禾田径场': [113.99776,22.60497],
+        '润扬体育馆': [113.99876,22.60499],
+        '棒球场': [113.99748,22.60122],
+        '篮球场': [113.99682,22.60334],
+        '足球场': [113.99835,22.60952],
+        //6
+        '一丹图书馆': [113.99313,22.60076],
+        '琳恩图书馆': [113.99304,22.59823],
+        '涵泳图书馆': [113.99189,22.60461],
+        //7
+        '行政楼': [113.99298,22.59756],
+        '检测中心': [113.99176,22.59837],
+        '会议中心': [113.99153,22.59605],
+        '办公楼': [113.99609,22.60124],
+        '荔园': [113.99501,22.60771],
+        '慧园': [113.99669,22.60662],
+        '创园': [113.99793,22.60793],
+        '欣园': [113.99676,22.61139]
+
         // ...更多建筑...
     };
     //创建地图
@@ -80,7 +145,7 @@
         if (buildingCoords) {
             map.flyTo({
                 center: buildingCoords,
-                zoom: 17
+                zoom: 18
             });
         } else {
             alert('未找到建筑物');
@@ -100,43 +165,50 @@
         });
 
 
-        // 点击事件监听器
-        map.on('click', function(e) {
-            // 检查是否点击了特定的图层
-            var features = map.queryRenderedFeatures(e.point, {
-                layers: ['hupancanting', 'zhongxincanting'] // 使用图层ID数组
-            });
-
-            if (features.length) {
-                var layerId = features[0].layer.id;
-                var url = 'https://www.sustech.edu.cn/zh/about.html';
-
-                // 根据点击的图层ID添加锚点到URL
-                if (layerId === 'hupancanting') {
-                    url += '#section-hupancanting';
-                } else if (layerId === 'zhongxincanting') {
-                    url += '#section-hupancanting2';
-                }
-
-                window.open(url, '_blank');
-            }
-        });
-
 
 
 //TeachingBuilding
         map.addLayer(Layer1_1);
         map.addLayer(Layer1_2);
         map.addLayer(Layer1_3);
+        map.addSource('label1_1', Source1_1);
+        map.addLayer(Layer1_1_L)
+        map.addSource('label1_2', Source1_2);
+        map.addLayer(Layer1_2_L)
+        map.addSource('label1_3', Source1_3);
+        map.addLayer(Layer1_3_L)
+
+
 //Dormitory
         map.addLayer(Layer2_1);
         map.addLayer(Layer2_2);
         map.addLayer(Layer2_3);
+        map.addLayer(Layer2_4);
+        map.addLayer(Layer2_5);
+        map.addLayer(Layer2_6);
+        map.addLayer(Layer2_7);
+        map.addLayer(Layer2_8);
+        map.addLayer(Layer2_9);
+        map.addLayer(Layer2_10);
+        map.addLayer(Layer2_11);
+        map.addLayer(Layer2_12);
+        map.addLayer(Layer2_13);
+        map.addLayer(Layer2_14);
+        map.addLayer(Layer2_15);
+        map.addLayer(Layer2_16);
+        map.addLayer(Layer2_17);
+        map.addLayer(Layer2_18);
+        map.addLayer(Layer2_19);
 
+
+        map.addSource('label2_1', Source2_1);
+        map.addLayer(Layer2_1_L)
+        map.addSource('label2_2', Source2_2);
+        map.addLayer(Layer2_2_L)
+        map.addSource('label2_3', Source2_3);
+        map.addLayer(Layer2_3_L)
 //Canteen
         map.addLayer(Layer3_1);
-
-
         map.addLayer(Layer3_2);
         map.addLayer(Layer3_3);
         map.addLayer(Layer3_4_1);
@@ -148,12 +220,24 @@
         map.addLayer(Layer3_8);
         map.addLayer(Layer3_9);
 
-        map.addSource('label3_1', Source1);
+        map.addSource('label3_1', Source3_1);
         map.addLayer(Layer3_1_L)
-        map.addSource('label3_2', Source2);
+        map.addSource('label3_2', Source3_2);
         map.addLayer(Layer3_2_L)
-        map.addSource('label3_3', Source3);
+        map.addSource('label3_3', Source3_3);
         map.addLayer(Layer3_3_L)
+        map.addSource('label3_4', Source3_4);
+        map.addLayer(Layer3_4_L)
+        map.addSource('label3_5', Source3_5);
+        map.addLayer(Layer3_5_L)
+        map.addSource('label3_6', Source3_6);
+        map.addLayer(Layer3_6_L)
+        map.addSource('label3_7', Source3_7);
+        map.addLayer(Layer3_7_L)
+        map.addSource('label3_8', Source3_8);
+        map.addLayer(Layer3_8_L)
+        map.addSource('label3_9', Source3_9);
+        map.addLayer(Layer3_9_L)
 
 //College
         map.addLayer(Layer4_1);
@@ -166,6 +250,24 @@
         map.addLayer(Layer4_8);
         map.addLayer(Layer4_9);
 
+        map.addSource('label4_1', Source4_1);
+        map.addLayer(Layer4_1_L)
+        map.addSource('label4_2', Source4_2);
+        map.addLayer(Layer4_2_L)
+        map.addSource('label4_3', Source4_3);
+        map.addLayer(Layer4_3_L)
+        map.addSource('label4_4', Source4_4);
+        map.addLayer(Layer4_4_L)
+        map.addSource('label4_5', Source4_5);
+        map.addLayer(Layer4_5_L)
+        map.addSource('label4_6', Source4_6);
+        map.addLayer(Layer4_6_L)
+        map.addSource('label4_7', Source4_7);
+        map.addLayer(Layer4_7_L)
+        map.addSource('label4_8', Source4_8);
+        map.addLayer(Layer4_8_L)
+        map.addSource('label4_9', Source4_9);
+        map.addLayer(Layer4_9_L)
 //Gym
         map.addLayer(Layer5_1);
         map.addLayer(Layer5_2);
@@ -173,11 +275,31 @@
         map.addLayer(Layer5_4);
         map.addLayer(Layer5_5);
         map.addLayer(Layer5_6);
+        map.addSource('label5_1', Source5_1);
+        map.addLayer(Layer5_1_L)
+        map.addSource('label5_2', Source5_2);
+        map.addLayer(Layer5_2_L)
+        map.addSource('label5_3', Source5_3);
+        map.addLayer(Layer5_3_L)
+        map.addSource('label5_4', Source5_4);
+        map.addLayer(Layer5_4_L)
+        map.addSource('label5_5', Source5_5);
+        map.addLayer(Layer5_5_L)
+        map.addSource('label5_6', Source5_6);
+        map.addLayer(Layer5_6_L)
+
 
 //Library
         map.addLayer(Layer6_1);
         map.addLayer(Layer6_2);
         map.addLayer(Layer6_3);
+        map.addSource('label6_1', Source6_1);
+        map.addLayer(Layer6_1_L)
+        map.addSource('label6_2', Source6_2);
+        map.addLayer(Layer6_2_L)
+        map.addSource('label6_3', Source6_3);
+        map.addLayer(Layer6_3_L)
+
 
 //Other
 
@@ -190,10 +312,192 @@
         map.addLayer(Layer7_7);
         map.addLayer(Layer7_8);
 
+        map.addSource('label7_1', Source7_1);
+        map.addLayer(Layer7_1_L)
+        map.addSource('label7_2', Source7_2);
+        map.addLayer(Layer7_2_L)
+        map.addSource('label7_3', Source7_3);
+        map.addLayer(Layer7_3_L)
+        map.addSource('label7_4', Source7_4);
+        map.addLayer(Layer7_4_L)
+        map.addSource('label7_5', Source7_5);
+        map.addLayer(Layer7_5_L)
+        map.addSource('label7_6', Source7_6);
+        map.addLayer(Layer7_6_L)
+        map.addSource('label7_7', Source7_7);
+        map.addLayer(Layer7_7_L)
+        map.addSource('label7_8', Source7_8);
+        map.addLayer(Layer7_8_L)
+
+
         updateZoomLevel();
 
     });
 
+
+
+    // 点击事件监听器
+    map.on('click', function(e) {
+        // 检查是否点击了特定的图层
+        var features = map.queryRenderedFeatures(e.point, {
+            layers: ['1jiao','2jiao','3jiao','jiuhuajingshe','jiaoshigongyu','xueshengsushe','xueshengsushe4','xueshengsushe5','xueshengsushe6','xueshengsushe7',
+                'xueshengsushe9' ,'xueshengsushe8','xueshengsushe9','xueshengsushe10','xueshengsushe11','xueshengsushe12'
+            ,'xueshengsushe13','xueshengsushe14','xueshengsushe15','xueshengsushe16','xueshengsushe17','xueshengsushe18','xueshengsushe19',
+                'hupancanting','zhongxincanting','jiudongcanting','maixiangwu','xicanting','jiaogongcanting','tianhongchaoshi'
+            ,'hupanchaoshi','liyuancanting','liyuanchaoshi','xinyuancanting','renwenshekexueyuan','lixueyuan1','lixueyuan2',
+                'dierkeyanlou','diyikeyanlou','lixueyuan3','shangxueyuan','gongxueyuanbei','gongxueyuannan','fengyucaochang'
+            ,'songhetianjingchang','runyangtiyuguan','bangqiuchang','lanqiuchang','zuqiuchang','yidantushuguan','linentushuguan','hanyongtushuguan',
+                'xingzhenglou' ,'jiancezhongxin','huiyizhongxin','bangonglou','liyuan','huiyuan','chuangyuan','xinyuan'] // 添加更多图层ID
+        });
+
+        if (features.length) {
+            var layerId = features[0].layer.id;
+            var baseUrl = '';
+            var anchor = '';
+            // 根据点击的图层ID确定锚点
+            if (layerId === '1jiao' || layerId === '2jiao' || layerId === '3jiao') {//1
+                baseUrl = 'https://aplacalike9050.github.io/CS309/HTML/Intro/TechingBuilding.html'
+                if (layerId === '1jiao') {
+                    anchor = '#section1';
+                } else if (layerId === '2jiao') {
+                    anchor = '#section2';
+                } else if (layerId === '3jiao') {
+                    anchor = '#section3';
+                }
+            }
+
+            else if (layerId === 'jiuhuajingshe' || layerId === 'jiaoshigongyu' || layerId === 'xueshengsushe'
+                || layerId === 'xueshengsushe4' || layerId === 'xueshengsushe5' || layerId === 'xueshengsushe6' || layerId === 'xueshengsushe7'
+                || layerId === 'xueshengsushe8' || layerId === 'xueshengsushe9' || layerId === 'xueshengsushe10' || layerId === 'xueshengsushe11'
+                || layerId === 'xueshengsushe12' || layerId === 'xueshengsushe13' || layerId === 'xueshengsushe14' || layerId === 'xueshengsushe15'
+                || layerId === 'xueshengsushe16' || layerId === 'xueshengsushe17' || layerId === 'xueshengsushe18' || layerId === 'xueshengsushe19') {//2
+                baseUrl = 'https://aplacalike9050.github.io/CS309/HTML/Intro/Dormitory.html'
+                if (layerId === 'jiuhuajingshe') {
+                    anchor = '#section1';
+                } else if (layerId === 'jiaoshigongyu') {
+                    anchor = '#section2';
+                } else if (layerId === layerId === 'xueshengsushe'
+                    || layerId === 'xueshengsushe4' || layerId === 'xueshengsushe5' || layerId === 'xueshengsushe6' || layerId === 'xueshengsushe7'
+                    || layerId === 'xueshengsushe8' || layerId === 'xueshengsushe9' || layerId === 'xueshengsushe10' || layerId === 'xueshengsushe11'
+                    || layerId === 'xueshengsushe12' || layerId === 'xueshengsushe13' || layerId === 'xueshengsushe14' || layerId === 'xueshengsushe15'
+                    || layerId === 'xueshengsushe16' || layerId === 'xueshengsushe17' || layerId === 'xueshengsushe18' || layerId === 'xueshengsushe19') {
+                    anchor = '#section3';
+                }
+            }
+
+            else if (layerId === 'hupancanting' || layerId === 'zhongxincanting' || layerId === 'jiudongcanting' || layerId === 'maixiangwu'
+                || layerId === 'xicanting' || layerId === 'jiaogongcanting' || layerId === 'tianhongchaoshi'
+                || layerId === 'hupanchaoshi' || layerId === 'liyuancanting' || layerId === 'liyuanchaoshi' || layerId === 'xinyuancanting') {//3
+                baseUrl = 'https://aplacalike9050.github.io/CS309/HTML/Intro/Canteen.html'
+                if (layerId === 'hupancanting') {
+                    anchor = '#section2';
+                } else if (layerId === 'zhongxincanting') {
+                    anchor = '#section1';
+                } else if (layerId === 'jiudongcanting') {
+                    anchor = '#section3';
+                }else if (layerId === 'maixiangwu') {
+                    anchor = '#section4';
+                } else if (layerId === 'xicanting') {
+                    anchor = '#section4';
+                } else if (layerId === 'jiaogongcanting') {
+                    anchor = '#section4';
+                }else if (layerId === 'tianhongchaoshi') {
+                    anchor = '#section7';
+                } else if (layerId === 'hupanchaoshi') {
+                    anchor = '#section8';
+                } else if (layerId === 'liyuancanting') {
+                    anchor = '#section5';
+                }else if (layerId === 'liyuanchaoshi') {
+                    anchor = '#section9';
+                } else if (layerId === 'xinyuancanting') {
+                    anchor = '#section6';
+                }
+
+            }
+
+            else if (layerId === 'renwenshekexueyuan' || layerId === 'lixueyuan1' || layerId === 'lixueyuan2'
+                || layerId === 'dierkeyanlou' || layerId === 'diyikeyanlou' ||
+                layerId === 'lixueyuan3' || layerId === 'shangxueyuan' || layerId === 'gongxueyuanbei' ||
+                layerId === 'gongxueyuannan') {//4
+                baseUrl = 'https://aplacalike9050.github.io/CS309/HTML/Intro/College.html'
+                if (layerId === 'renwenshekexueyuan') {
+                    anchor = '#section9';
+                } else if (layerId === 'dierkeyanlou') {
+                    anchor = '#section5';
+                } else if (layerId === 'diyikeyanlou') {
+                    anchor = '#section4';
+                } else if (layerId === 'lixueyuan3') {
+                    anchor = '#section1';
+                }else if (layerId === 'lixueyuan1') {
+                    anchor = '#section3';
+                }else if (layerId === 'lixueyuan2') {
+                    anchor = '#section3';
+                } else if (layerId === 'shangxueyuan') {
+                    anchor = '#section6';
+                } else if (layerId === 'gongxueyuanbei') {
+                    anchor = '#section7';
+                } else if (layerId === 'gongxueyuannan') {
+                    anchor = '#section8';
+                }
+            }
+
+            else if (layerId === 'fengyucaochang' || layerId === 'songhetianjingchang' ||
+                layerId === 'runyangtiyuguan' || layerId === 'bangqiuchang' ||
+                layerId === 'lanqiuchang' || layerId === 'zuqiuchang') {//5
+                baseUrl = 'https://aplacalike9050.github.io/CS309/HTML/Intro/Gym.html'
+                if (layerId === 'fengyucaochang') {
+                    anchor = '#section1';
+                } else if (layerId === 'songhetianjingchang') {
+                    anchor = '#section2';
+                } else if (layerId === 'runyangtiyuguan') {
+                    anchor = '#section3';
+                } else if (layerId === 'bangqiuchang') {
+                    anchor = '#section4';
+                } else if (layerId === 'lanqiuchang') {
+                    anchor = '#section5';
+                } else if (layerId === 'zuqiuchang') {
+                    anchor = '#section6';
+                }
+            }
+
+            else if (layerId === 'yidantushuguan' || layerId === 'linentushuguan' || layerId === 'hanyongtushuguan') {//6
+                baseUrl = 'https://aplacalike9050.github.io/CS309/HTML/Intro/Library.html'
+                if (layerId === 'yidantushuguan') {
+                    anchor = '#section1';
+                } else if (layerId === 'linentushuguan') {
+                    anchor = '#section2';
+                } else if (layerId === 'hanyongtushuguan') {
+                    anchor = '#section3';
+                }
+            }
+
+            else if (layerId === 'xingzhenglou' || layerId === 'jiancezhongxin' || layerId === 'huiyizhongxin' ||
+                layerId === 'bangonglou' || layerId === 'liyuan' || layerId === 'huiyuan' ||
+                layerId === 'chuangyuan' || layerId === 'xinyuan') {//7
+                baseUrl = 'https://aplacalike9050.github.io/CS309/HTML/Intro/Other.html'
+                if (layerId === 'xingzhenglou') {
+                    anchor = '#section1';
+                } else if (layerId === 'jiancezhongxin') {
+                    anchor = '#section2';
+                } else if (layerId === 'huiyizhongxin') {
+                    anchor = '#section3';
+                } else if (layerId === 'bangonglou') {
+                    anchor = '#section4';
+                } else if (layerId === 'liyuan') {
+                    anchor = '#section5';
+                } else if (layerId === 'huiyuan') {
+                    anchor = '#section6';
+                }else if (layerId === 'chuangyuan') {
+                    anchor = '#section7';
+                }else if (layerId === 'xinyuan') {
+                    anchor = '#section8';
+                }
+            }
+
+            var fullUrl = baseUrl + anchor;
+            window.open(fullUrl, '_blank');
+        }
+    });
     function updateZoomLevel() {
         var zoomLevel = map.getZoom();
         document.getElementById('zoom-level').innerHTML = 'Zoom Level: ' + zoomLevel.toFixed(2);
