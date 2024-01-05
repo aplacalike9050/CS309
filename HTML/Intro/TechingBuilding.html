@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>教学楼</title>
-    <link rel="stylesheet" href="../../CSS/intro/TechingBuilding.css">
+    <link rel="stylesheet" href="https://aplacalike9050.github.io/CS309/CSS/intro/TechingBuilding.css">
 </head>
 <body>
 
@@ -12,7 +12,7 @@
     <img src="https://raw.githubusercontent.com/aplacalike9050/CS309/main/%E4%B8%BB%E9%A1%B5/QQ%E5%9B%BE%E7%89%8720231224211003.png" alt="Large Image" class="header-image">
 </div>
 <nav class="topnav">
-    <a href="#home">主页</a>
+    <a href="https://aplacalike9050.github.io/CS309/HTML/Intro.html">主页</a>
     <a href="https://aplacalike9050.github.io/CS309/HTML/Intro/TechingBuilding.html">教学楼区</a>
     <a href="https://aplacalike9050.github.io/CS309/HTML/Intro/Canteen.html">餐厅超市</a>
     <a href="https://aplacalike9050.github.io/CS309/HTML/Intro/Dormitory.html">宿舍区</a>
@@ -30,7 +30,15 @@
         <div class="section-content">
             <img src="https://raw.githubusercontent.com/aplacalike9050/CS309/main/%E6%95%99%E5%AD%A6%E6%A5%BC/%E7%AC%AC%E4%B8%80%E6%95%99%E5%AD%A6%E6%A5%BC.png" alt="Restaurant 1 Image" class="section-image">
             <div class="section-description">一教是校园内的核心教学设施，拥有现代化的教室和讲堂。这座建筑以其先进的教学技术和灵活的空间布局著称，为各类学术课程和活动提供了理想的环境。教室内配备了高科技的学习工具，如智能黑板和多媒体系统，支持互动式学习。一教不仅是日常授课的场所，也经常举办讲座和研讨会，促进师生间的交流和思想碰撞。</div>
-            <div class="section-comments">第一教学楼评论区</div>
+            <div class="section-comments">
+                <div class="comment-section">
+                    <!-- 提交的评论将在这里显示 -->
+                </div>
+                <div class="input-area">
+                    <textarea class="comment-input" placeholder="在此输入您的评论..."></textarea>
+                    <button class="submit-comment">提交评论</button>
+                </div>
+            </div>
         </div>
         <hr>
     </section>
@@ -41,7 +49,15 @@
         <div class="section-content">
             <img src="https://raw.githubusercontent.com/aplacalike9050/CS309/main/%E6%95%99%E5%AD%A6%E6%A5%BC/%E7%AC%AC%E4%BA%8C%E6%95%99%E5%AD%A6%E6%A5%BC.png" alt="Restaurant 2 Image" class="section-image">
             <div class="section-description">二教以其现代化的设计和多功能空间而著称，是一个促进创新和合作的理想场所。建筑内部拥有多个大小不一的教室，适合不同规模和形式的教学活动。每个教室都配备了最新的教育技术，包括高分辨率投影仪和高速网络连接，确保了教学和学习的高效性。此外，二教还设有学生休息区和小组讨论区，为学生提供了舒适的学习和交流环境。</div>
-            <div class="section-comments">第二教学楼评论区</div>
+            <div class="section-comments">
+                <div class="comment-section">
+                    <!-- 提交的评论将在这里显示 -->
+                </div>
+                <div class="input-area">
+                    <textarea class="comment-input" placeholder="在此输入您的评论..."></textarea>
+                    <button class="submit-comment">提交评论</button>
+                </div>
+            </div>
         </div>
         <hr>
     </section>
@@ -52,7 +68,15 @@
         <div class="section-content">
             <img src="https://raw.githubusercontent.com/aplacalike9050/CS309/main/%E6%95%99%E5%AD%A6%E6%A5%BC/%E7%AC%AC%E4%B8%89%E6%95%99%E5%AD%A6%E6%A5%BC.png" alt="Restaurant 3 Image" class="section-image">
             <div class="section-description">三教是一座融合传统与现代设计元素的教学楼，提供了宽敞舒适的学习空间。它的每个角落都经过精心设计，以满足学术需求。教室内部装饰简洁，配备了全面的教学设施，包括音频系统和视频投影，确保了教学质量。三教不仅是课程学习的场所，也是师生互动和知识分享的重要平台。此外，它还经常作为各种学术和文化活动的举办地，为校园生活增添了丰富多彩的内容。</div>
-            <div class="section-comments">第三教学楼评论区</div>
+            <div class="section-comments">
+                <div class="comment-section">
+                    <!-- 提交的评论将在这里显示 -->
+                </div>
+                <div class="input-area">
+                    <textarea class="comment-input" placeholder="在此输入您的评论..."></textarea>
+                    <button class="submit-comment">提交评论</button>
+                </div>
+            </div>
         </div>
         <hr>
     </section>
@@ -61,6 +85,31 @@
 
     <!-- Add more sections as needed -->
 </div>
+<script>
 
+    document.addEventListener('DOMContentLoaded', function () {
+        // 获取所有提交按钮
+        let submitButtons = document.querySelectorAll('.submit-comment');
+        // 为每个按钮添加点击事件监听器
+        submitButtons.forEach(function (submitButton) {
+            submitButton.addEventListener('click', function() {
+                // 找到当前按钮关联的输入框和评论显示区域
+                let commentInput = this.parentElement.querySelector('.comment-input');
+                let commentSection = this.parentElement.parentElement.querySelector('.comment-section');
+                let text = commentInput.value.trim();
+                if (text) {
+                    // 创建评论元素并添加到评论区
+                    let commentDiv = document.createElement('div');
+                    commentDiv.className = 'comment';
+                    commentDiv.innerHTML = `<span class="username">用户:</span> ${text}`;
+                    commentSection.appendChild(commentDiv);
+                    // 清空输入框
+                    commentInput.value = '';
+                }
+            });
+        });
+    });
+
+</script>
 </body>
 </html>
