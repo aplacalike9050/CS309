@@ -91,3 +91,57 @@
         width: 95%; /* 在移动设备上留更少的边缘空间 */
     }
 }
+
+.comment-section {
+    min-height: 200px; /* 给定一个最小高度，确保即使没有评论时也能看到区域 */
+    max-height: 200px;
+    overflow-y: auto; /* 启用垂直滚动 */
+    background-color: #f9f9f9; /* 为了可见性，可以添加一个背景色 */
+    border: 1px solid #ddd;
+    margin-bottom: 20px; /* 与输入区域的间距 */
+}
+
+.input-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comment-input {
+    flex-grow: 1; /* 输入框占据剩余空间 */
+    margin-right: 10px; /* 与提交按钮的间距 */
+    height: 20px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    resize: none; /* 防止用户调整文本框大小 */
+}
+
+.submit-comment {
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submit-comment:hover {
+    background-color: #0056b3;
+}
+
+.comment {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.username {
+    font-weight: bold;
+    margin-right: 5px;
+}
