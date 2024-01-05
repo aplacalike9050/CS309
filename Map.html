@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset='utf-8' />
+    <title>Map</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css' type='text/css' />
+    <script type="text/javascript" src="graph.js"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 77%; }
+        #map_other { position: absolute; top: 0; right: 0; width: 23%; height: 100vh; background-color: #f0f0f0; padding: 10px; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+<div style="position: relative; height: 100vh;">
+    <div id='map' style="position: absolute; top: 0; bottom: 0; width: 100%;"></div>
+    <div style="position: absolute; top: 10px; left: 10px; z-index: 1;">
+        <input type="text" id="searchBox" placeholder="搜索建筑...">
+        <button id="searchButton">搜索</button>
+    </div>
+    <div id="zoom-level" style="position: absolute; top: 50px; left: 10px; z-index: 1; background: white; padding: 5px; border-radius: 5px; box-shadow: 0 0 5px rgba(0,0,0,0.3);">
+        Zoom Level: 16
+    </div>
+</div>
+<div id='map_other' style="overflow: scroll">
+    <h2>Server</h2>
+    <button id="register_log_change" onclick="register_log_change()">Register or Log</button>
+    <button id="road_search_change" onclick="road_search_change()">Road Search</button>
+    <button id="bus_line_set_change" onclick="bus_line_set_change()">Bus Line Set</button>
+    <div id="road_search" style="display: none">
+        <h4>地图导航</h4>
+        <div id='road_search_inner' style="overflow: scroll">
+                        <h5>Start coordinate</h5>
+                        <input type="text" id="start_longitude" name="start_longitude"/>,<input type="text" id="start_latitude" name="start_latitude"/>
+                        <br>
+                        <h5>End coordinate</h5>
+                        <input type="text" id="end_longitude" name="end_longitude"/>,<input type="text" id="end_latitude" name="end_latitude"/>
+                        <br>
+                        <label>
+                            <input type="button" id="go_go_go" value="Go!">
+                            <input type="button" id="walk_walk_walk" value="walk!">
+                            <input type="button" id="clear_go" value="Clear Line">
+                        </label>
+                        <br>
+                    </div>
+    </div>
+    <div id="bus_line_set" style="display: none">
+        <div id='bus_line_change_server' style="overflow: scroll">
+            <table id="bus_line_1_table" border= "1" cellpadding="2" cellspacing="1" width="100px">
+                <caption id="a">
+                    <h4>Bus Line 1 Manage</h4>
+                </caption>
+                <tr>
+                    <th>Station Index</th>
+                    <th>Station</th>
+                    <th>Longitude</th>
+                    <th>Latitude</th>
+                    <th>Operation</th>
+                </tr>
+                <tbody id="tbody">
+                <tr style="display: none">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up(this)">
+                        <input type="button" value="Down" onclick="bus_station_down(this)">
+                        <input type="button" value="Delete" onclick="removeStation(this)">
+                    </td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>欣园</td>
+                    <td>113.99742</td>
+                    <td>22.61072</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up(this)">
+                        <input type="button" value="Down" onclick="bus_station_down(this)">
+                        <input type="button" value="Delete" onclick="removeStation(this)">
+                    </td>
+                </tr><!--1-->
+                <tr>
+                    <td>2</td>
+                    <td>慧园</td>
+                    <td>113.99830</td>
+                    <td>22.60596</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up(this)">
+                        <input type="button" value="Down" onclick="bus_station_down(this)">
+                        <input type="button" value="Delete" onclick="removeStation(this)">
+                    </td>
+                </tr><!--2-->
+                <tr>
+                    <td>3</td>
+                    <td>创园</td>
+                    <td>113.99668</td>
+                    <td>22.60607</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up(this)">
+                        <input type="button" value="Down" onclick="bus_station_down(this)">
+                        <input type="button" value="Delete" onclick="removeStation(this)">
+                    </td>
+                </tr><!--3-->
+                <tr>
+                    <td>4</td>
+                    <td>荔园</td>
+                    <td>113.99523</td>
+                    <td>22.60634</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up(this)">
+                        <input type="button" value="Down" onclick="bus_station_down(this)">
+                        <input type="button" value="Delete" onclick="removeStation(this)">
+                    </td>
+                </tr><!--4-->
+                <tr>
+                    <td>5</td>
+                    <td>学生宿舍</td>
+                    <td>113.99387</td>
+                    <td>22.60472</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up(this)">
+                        <input type="button" value="Down" onclick="bus_station_down(this)">
+                        <input type="button" value="Delete" onclick="removeStation(this)">
+                    </td>
+                </tr><!--5-->
+                <tr>
+                    <td>6</td>
+                    <td>社康中心</td>
+                    <td>113.99561</td>
+                    <td>22.60290</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up(this)">
+                        <input type="button" value="Down" onclick="bus_station_down(this)">
+                        <input type="button" value="Delete" onclick="removeStation(this)">
+                    </td>
+                </tr><!--6-->
+                <tr>
+                    <td>7</td>
+                    <td>教工餐厅</td>
+                    <td>113.99773</td>
+                    <td>22.60329</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up(this)">
+                        <input type="button" value="Down" onclick="bus_station_down(this)">
+                        <input type="button" value="Delete" onclick="removeStation(this)">
+                    </td>
+                </tr><!--7-->
+                <tr>
+                    <td>8</td>
+                    <td>专家公寓</td>
+                    <td>113.99835</td>
+                    <td>22.60189</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up(this)">
+                        <input type="button" value="Down" onclick="bus_station_down(this)">
+                        <input type="button" value="Delete" onclick="removeStation(this)">
+                    </td>
+                </tr><!--8-->
+                <tr>
+                    <td>9</td>
+                    <td>三号门</td>
+                    <td>113.99845</td>
+                    <td>22.60025</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up(this)">
+                        <input type="button" value="Down" onclick="bus_station_down(this)">
+                        <input type="button" value="Delete" onclick="removeStation(this)">
+                    </td>
+                </tr><!--9-->
+                <tr>
+                    <td>10</td>
+                    <td>二号门</td>
+                    <td>113.99586</td>
+                    <td>22.59781</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up(this)">
+                        <input type="button" value="Down" onclick="bus_station_down(this)">
+                        <input type="button" value="Delete" onclick="removeStation(this)">
+                    </td>
+                </tr><!--10-->
+                <tr>
+                    <td>11</td>
+                    <td>一号门</td>
+                    <td>113.99440</td>
+                    <td>22.59609</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up(this)">
+                        <input type="button" value="Down" onclick="bus_station_down(this)">
+                        <input type="button" value="Delete" onclick="removeStation(this)">
+                    </td>
+                </tr><!--11-->
+                <tr>
+                    <td>12</td>
+                    <td>行政楼</td>
+                    <td>113.99241</td>
+                    <td>22.59703</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up(this)">
+                        <input type="button" value="Down" onclick="bus_station_down(this)">
+                        <input type="button" value="Delete" onclick="removeStation(this)">
+                    </td>
+                </tr><!--12-->
+                <tr>
+                    <td>13</td>
+                    <td>七号门</td>
+                    <td>113.99036</td>
+                    <td>22.59711</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up(this)">
+                        <input type="button" value="Down" onclick="bus_station_down(this)">
+                        <input type="button" value="Delete" onclick="removeStation(this)">
+                    </td>
+                </tr><!--13-->
+                <tr>
+                    <td>14</td>
+                    <td>科研楼</td>
+                    <td>113.99153</td>
+                    <td>22.59959</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up(this)">
+                        <input type="button" value="Down" onclick="bus_station_down(this)">
+                        <input type="button" value="Delete" onclick="removeStation(this)">
+                    </td>
+                </tr><!--14-->
+                <tr>
+                    <td>15</td>
+                    <td>工学院</td>
+                    <td>113.99021</td>
+                    <td>22.60337</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up(this)">
+                        <input type="button" value="Down" onclick="bus_station_down(this)">
+                        <input type="button" value="Delete" onclick="removeStation(this)">
+                    </td>
+                </tr><!--15-->
+                </tbody>
+            </table>
+            <label>
+                <input type="button" value="fold" onclick="table_fold()">
+                <input type="button" value="unfold" onclick="table_unfold()">
+            </label>
+            <form name="form1">
+                <label id="bus_line_1_add" style="display: none">
+                    <h6>Station Name</h6>
+                    <input type="text" id="station_name_input" name="station_name_input">
+                    <h6> Coordinate:</h6>
+                    <input type="text" id="longitude_input" name="longitude_input"/>,
+                    <input type="text" id="latitude_input" name="latitude_input"/>
+                    <br/>
+                    <input type="button" value="Add" onclick="bus_station_add()">
+                    <input type="button" id="update_bus" value="Upload">
+                    <input type="button" id="bus_line_hide" value="Hide">
+                    <input type="button" id="bus_line_unhide" value="Show">
+                </label>
+            </form>
+            <br>
+            <table id="bus_line_2_table" border= "1" cellpadding="2" cellspacing="1" width="100px">
+                <caption id="b">
+                    <h4>Bus Line 2 Manage</h4>
+                </caption>
+                <tr>
+                    <th>Station Index</th>
+                    <th>Station</th>
+                    <th>Longitude</th>
+                    <th>Latitude</th>
+                    <th>Operation</th>
+                </tr>
+                <tbody id="tbody_1">
+                <tr style="display: none">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up_1(this)">
+                        <input type="button" value="Down" onclick="bus_station_down_1(this)">
+                        <input type="button" value="Delete" onclick="removeStation_1(this)">
+                    </td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>欣园</td>
+                    <td>113.99742</td>
+                    <td>22.61072</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up_1(this)">
+                        <input type="button" value="Down" onclick="bus_station_down_1(this)">
+                        <input type="button" value="Delete" onclick="removeStation_1(this)">
+                    </td>
+                </tr><!--1-->
+                <tr>
+                    <td>2</td>
+                    <td>慧园</td>
+                    <td>113.99830</td>
+                    <td>22.60596</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up_1(this)">
+                        <input type="button" value="Down" onclick="bus_station_down_1(this)">
+                        <input type="button" value="Delete" onclick="removeStation_1(this)">
+                    </td>
+                </tr><!--2-->
+                <tr>
+                    <td>3</td>
+                    <td>创园</td>
+                    <td>113.99668</td>
+                    <td>22.60607</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up_1(this)">
+                        <input type="button" value="Down" onclick="bus_station_down_1(this)">
+                        <input type="button" value="Delete" onclick="removeStation_1(this)">
+                    </td>
+                </tr><!--3-->
+                <tr>
+                    <td>4</td>
+                    <td>荔园</td>
+                    <td>113.99523</td>
+                    <td>22.60634</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up_1(this)">
+                        <input type="button" value="Down" onclick="bus_station_down_1(this)">
+                        <input type="button" value="Delete" onclick="removeStation_1(this)">
+                    </td>
+                </tr><!--4-->
+                <tr>
+                    <td>5</td>
+                    <td>学生宿舍</td>
+                    <td>113.99387</td>
+                    <td>22.60472</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up_1(this)">
+                        <input type="button" value="Down" onclick="bus_station_down_1(this)">
+                        <input type="button" value="Delete" onclick="removeStation_1(this)">
+                    </td>
+                </tr><!--5-->
+                <tr>
+                    <td>6</td>
+                    <td>工学院</td>
+                    <td>113.99224</td>
+                    <td>22.60286</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up_1(this)">
+                        <input type="button" value="Down" onclick="bus_station_down_1(this)">
+                        <input type="button" value="Delete" onclick="removeStation_1(this)">
+                    </td>
+                </tr><!--6-->
+                <tr>
+                    <td>7</td>
+                    <td>科研楼</td>
+                    <td>113.99153</td>
+                    <td>22.59959</td>
+                    <td>
+                        <input type="button" value="Up" onclick="bus_station_up_1(this)">
+                        <input type="button" value="Down" onclick="bus_station_down_1(this)">
+                        <input type="button" value="Delete" onclick="removeStation_1 (this)">
+                    </td>
+                </tr><!--7-->
+                </tbody>
+            </table>
+            <label>
+                <input type="button" value="fold" onclick="table_fold_1()">
+                <input type="button" value="unfold" onclick="table_unfold_1()">
+            </label>
+            <form name="form1">
+                <label id="bus_line_2_add" style="display: none">
+                    <h6>Station Name</h6>
+                    <input type="text" id="station_name_input_1" name="station_name_input_1">
+                    <h6> Coordinate:</h6>
+                    <input type="text" id="longitude_input_1" name="longitude_input_1"/>,
+                    <input type="text" id="latitude_input_1" name="latitude_input_1"/>
+                    <br>
+                    <input type="button" value="Add" onclick="bus_station_add_1()">
+                    <input type="button" id="update_bus_1" value="Upload">
+                    <input type="button" id="bus_line_hide_1" value="Hide">
+                    <input type="button" id="bus_line_unhide_1" value="Show">
+                </label>
+            </form>
+        </div>
+    </div>
+    <div id="register_log" >
+        <table id="users_state" border="2" cellpadding="4" cellspacing="2" width="200px">
+            <caption id="users_state_title">
+                <h4>User State</h4>
+            </caption>
+            <tr>
+                <th>User Name</th>
+                <th style="display: none">User Password</th>
+                <th>User State</th>
+                <th>Operation</th>
+            </tr>
+            <tbody id="user_log">
+            <tr style="display: none">
+                <td></td>
+                <td style="display: none"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Temporary</td>
+                <td style="display: none">NULL</td>
+                <td>VISITOR</td>
+                <td>
+                    <input type="button" value="Log Out" onclick="log_out(this)">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <label id="user_log_in">
+            <input type="text" id="user_name" placeholder="输入您的姓名">
+            <br>
+            <input type="password" id="user_password" placeholder="请输入您的密码">
+            <br>
+            <input type="button" value="Log" onclick="log_in()">
+        </label>
+        <label id="user_register">
+            <h4>Register</h4>
+            <input type="text" id="user_name_input" placeholder="请输入您的姓名">
+            <br>
+            <input type="password" id="user_password_input" placeholder="请输入您的密码">
+            <br>
+            <input type="password" id="user_password_repeat" placeholder="请确认您的密码">
+            <br>
+            <input type="button" id="register" value="注册账户" onclick="register()">
+        </label>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <label id="log_test">
+            <input type="button" id="AS_Paranoid" value="test_1" onclick="AS_Paranoid()">
+            <input type="button" id="AS_user" value="test_2" onclick="AS_user()">
+        </label>
+    </div>
+</div>
+<style>
+    /* 确保地图和缩放级别显示不被遮挡 */
+    #zoom-level {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 1; /* 确保在地图之上 */
+        background: white;
+        padding: 5px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    }
+</style>
+
+
+<script type="module">
+    import { Layer1_1 , Layer1_2 , Layer1_3 ,
+
+        Source1_1,Layer1_1_L,Source1_2,Layer1_2_L,Source1_3,Layer1_3_L,} from '../JS/TeachingBuilding.js';
+    import {Layer2_1 , Layer2_2 , Layer2_3,
+        Layer2_4 , Layer2_5 , Layer2_6,
+        Layer2_7 , Layer2_8 , Layer2_9,
+        Layer2_10 , Layer2_11 , Layer2_12,
+        Layer2_13 , Layer2_14 , Layer2_15,
+        Layer2_16 , Layer2_17 , Layer2_18,
+        Layer2_19 ,
+        Source2_1,Layer2_1_L,Source2_2,Layer2_2_L,Source2_3,Layer2_3_L,} from '../JS/Dormitory.js'
+    import {Layer3_1 , Layer3_2 , Layer3_3,
+        Layer3_4_1 , Layer3_4_2 , Layer3_4_3,
+        Layer3_5 , Layer3_6 , Layer3_7, Layer3_8,Layer3_9,
+        Source3_1,Layer3_1_L,Source3_2,Layer3_2_L,Source3_3,Layer3_3_L,
+        Source3_4,Layer3_4_L,Source3_5,Layer3_5_L,Source3_6,Layer3_6_L,
+        Source3_7,Layer3_7_L,Source3_8,Layer3_8_L,Source3_9,Layer3_9_L} from '../JS/Canteen.js';
+    import { Layer4_1,Layer4_2,Layer4_3,
+        Layer4_4,Layer4_5,Layer4_6,
+        Layer4_7,Layer4_8,Layer4_9,
+        Source4_1,Layer4_1_L,Source4_2,Layer4_2_L,Source4_3,Layer4_3_L,
+        Source4_4,Layer4_4_L,Source4_5,Layer4_5_L,Source4_6,Layer4_6_L,
+        Source4_7,Layer4_7_L,Source4_8,Layer4_8_L,Source4_9,Layer4_9_L,} from '../JS/College.js';
+    import {Layer5_1,Layer5_2,Layer5_3,
+        Layer5_4,Layer5_5,Layer5_6,
+        Source5_1,Layer5_1_L,Source5_2,Layer5_2_L,Source5_3,Layer5_3_L,
+        Source5_4,Layer5_4_L,Source5_5,Layer5_5_L,Source5_6,Layer5_6_L,} from '../JS/Gym.js';
+    import {Layer6_1,Layer6_2,Layer6_3,
+        Source6_1,Layer6_1_L,Source6_2,Layer6_2_L,Source6_3,Layer6_3_L,} from '../JS/Library.js';
+    import {Layer7_1,Layer7_2,Layer7_3,
+        Layer7_4,Layer7_5,Layer7_6,
+        Layer7_7,Layer7_8,
+        Source7_1,Layer7_1_L,Source7_2,Layer7_2_L,Source7_3,Layer7_3_L,
+        Source7_4,Layer7_4_L,Source7_5,Layer7_5_L,Source7_6,Layer7_6_L,
+        Source7_7,Layer7_7_L,Source7_8,Layer7_8_L} from '../JS/Other.js';
+    import { Layer_busline_1,Layer_busline_2,Layer_road_1,Layer_road_2,Layer_road_3,Layer_road_4,Layer_road_5 } from '../JS/busline.js';
+
+
+
+
+
+
+
+
+    mapboxgl.accessToken = 'pk.eyJ1Ijoia2lkNDU2IiwiYSI6ImNsbzE5bDhicTFsNTQyam1jOGpiM2o5dGkifQ.83sSyCg3T5yBZi6qvmgqBA';
+    var buildings = {
+        //1
+        '一教': [113.99220,22.59926],
+        '二教': [113.99164,22.59770],
+        '三教': [113.99501,22.59945],
+        //2
+        '九华精舍': [113.99444,22.60319],
+        '教师公寓': [113.99701,22.60293],
+        '学生宿舍': [113.99393,22.60501],
+        //3
+        '湖畔餐厅': [113.99260,22.59980],
+        '中心餐厅': [113.99290,22.60087],
+        '西餐厅': [113.99739,22.60261],
+        '天虹超市': [113.99484,22.60448],
+        '湖畔超市': [113.99367,22.60312],
+        '荔园餐厅': [113.99437,22.60791],
+        '荔园超市': [113.99444,22.60752],
+        '欣园餐厅': [ 113.99685,22.61070],
+        //4
+        '理学院西': [113.99044,22.59775],
+        '第二科研楼': [113.99079,22.59898],
+        '第一科研楼': [113.99171,22.59960],
+        '理学院东': [113.99433,22.59791],
+        '商学院': [113.99568,22.59904],
+        '工学院北': [113.99027,22.60450],
+        '工学院南': [113.99041,22.60327],
+        '人文社科学院': [113.99657,22.60064],
+        //5
+        '风雨操场': [113.99457,22.60206],
+        '松禾田径场': [113.99776,22.60497],
+        '润扬体育馆': [113.99876,22.60499],
+        '棒球场': [113.99748,22.60122],
+        '篮球场': [113.99682,22.60334],
+        '足球场': [113.99835,22.60952],
+        //6
+        '一丹图书馆': [113.99313,22.60076],
+        '琳恩图书馆': [113.99304,22.59823],
+        '涵泳图书馆': [113.99189,22.60461],
+        //7
+        '行政楼': [113.99298,22.59756],
+        '检测中心': [113.99176,22.59837],
+        '会议中心': [113.99153,22.59605],
+        '办公楼': [113.99609,22.60124],
+        '荔园': [113.99501,22.60771],
+        '慧园': [113.99669,22.60662],
+        '创园': [113.99793,22.60793],
+        '欣园': [113.99676,22.61139]
+
+        // ...更多建筑...
+    };
+    //创建地图
+    var map = new mapboxgl.Map({
+        container: 'map', // container ID
+        style: 'mapbox://styles/mapbox/light-v10', // style URL
+        center: [113.99512,22.60050], // 指定的起始位置
+        zoom: 16 // 起始缩放级别
+    });
+    document.getElementById('searchButton').addEventListener('click', function() {
+        var searchQuery = document.getElementById('searchBox').value;
+        var buildingCoords = buildings[searchQuery];
+        if (buildingCoords) {
+            map.flyTo({
+                center: buildingCoords,
+                zoom: 17
+            });
+        } else {
+            alert('未找到建筑物');
+        }
+    });
+
+
+    // 假设您有一个包含坐标数组的数据
+    var coordinatesArray = [
+    ];
+
+    // 创建 GeoJSON 对象
+    var geojson = {
+        type: 'FeatureCollection',
+        features: [
+            {
+                type: 'Feature',
+                geometry: {
+                    type: 'LineString',
+                    coordinates: coordinatesArray
+                },
+                properties: {}
+            }
+        ]
+    };
+
+
+    var coordinatesArray_ass = [
+    ];
+    var geojson_ass = {
+        type: 'FeatureCollection',
+        features: [
+            {
+                type: 'Feature',
+                geometry: {
+                    type: 'LineString',
+                    coordinates: coordinatesArray_ass
+                },
+                properties: {}
+            }
+        ]
+    };
+
+
+
+    var coordinatesArray_car = [
+    ];
+    var geojson_car = {
+        type: 'FeatureCollection',
+        features: [
+            {
+                type: 'Feature',
+                geometry: {
+                    type: 'LineString',
+                    coordinates: coordinatesArray_car
+                },
+                properties: {}
+            }
+        ]
+    };
+
+
+
+    var coordinatesArray_bus_line_1 = [
+        [113.99742,22.61072],//欣园
+        [113.99772,22.61046],
+        [113.99787,22.61015],
+        [113.99809,22.60985],
+        [113.99842,22.60904],
+        [113.99865,22.60848],
+        [113.99879,22.60830],
+        [113.99889,22.60805],
+        [113.99887,22.60791],
+        [113.99880,22.60751],
+        [113.99875,22.60722],
+        [113.99867,22.60667],
+        [113.99867,22.60666],
+        [113.99865,22.60659],
+        [113.99842,22.60612],
+        [113.99834,22.60601],
+        [113.99830,22.60596],//慧园
+        [113.99821,22.60594],
+        [113.99796,22.60582],
+        [113.99788,22.60580],
+        [113.99779,22.60578],
+        [113.99768,22.60577],
+        [113.99743,22.60580],
+        [113.99733,22.60582],
+        [113.99668,22.60607],//创园
+        [113.99639,22.60617],
+        [113.99599,22.60632],
+        [113.99580,22.60637],
+        [113.99558,22.60639],
+        [113.99546,22.60638],
+        [113.99539,22.60637],
+        [113.99532,22.60636],
+        [113.99523,22.60634],//荔园
+        [113.99516,22.60633],
+        [113.99508,22.60630],
+        [113.99491,22.60625],
+        [113.99471,22.60617],
+        [113.99381,22.60563],
+        [113.99365,22.60555],
+        [113.99346,22.60547],
+        [113.99366,22.60512],
+        [113.99387,22.60472],//学生宿舍
+        [113.99393,22.60460],
+        [113.99420,22.60424],
+        [113.99458,22.60392],
+        [113.99501,22.60341],
+        [113.99516,22.60325],
+        [113.99542,22.60299],
+        [113.99548,22.60294],
+        [113.99561,22.60290], //社康中心
+        [113.99582,22.60289],
+        [113.99661,22.60294],
+        [113.99675,22.60297],
+        [113.99773,22.60329],//教工餐厅
+        [113.99788,22.60334],
+        [113.99795,22.60319],
+        [113.99802,22.60267],
+        [113.99831,22.60196],
+        [113.99835,22.60189],//专家公寓
+        [113.99868,22.60154],
+        [113.99874,22.60137],
+        [113.99877,22.60105],
+        [113.99882,22.60084],
+        [113.99900,22.60056],
+        [113.99912,22.60046],
+        [113.99845,22.60025],//三号门
+        [113.99820,22.60016],
+        [113.99800,22.60008],
+        [113.99787,22.59999],
+        [113.99768,22.59981],
+        [113.99731,22.59909],
+        [113.99716,22.59891],
+        [113.99681,22.59862],
+        [113.99676,22.59860],
+        [113.99642,22.59833],
+        [113.99586,22.59781],//二号门
+        [113.99565,22.59753],
+        [113.99538,22.59725],
+        [113.99516,22.59688],
+        [113.99508,22.59661],
+        [113.99503,22.59652],
+        [113.99495,22.59643],
+        [113.99467,22.59620],
+        [113.99453,22.59614],
+        [113.99440,22.59609],
+        [113.99424,22.59604],//一号门
+        [113.99405,22.59602],
+        [113.99374,22.59606],
+        [113.99374,22.59606],
+        [113.99350,22.59613],
+        [113.99328,22.59622],
+        [113.99303,22.59644],
+        [113.99274,22.59673],
+        [113.99241,22.59703],//行政楼
+        [113.99214,22.59722],
+        [113.99209,22.59724],
+        [113.99201,22.59727],
+        [113.99188,22.59727],
+        [113.99179,22.59726],
+        [113.99158,22.59722],
+        [113.99124,22.59711],
+        [113.99082,22.59699],
+        [113.99065,22.59698],
+        [113.99056,22.59699],
+        [113.99047,22.59702],
+        [113.99036,22.59711],//七号门
+        [113.99030,22.59722],
+        [113.99029,22.59730],
+        [113.99030,22.59739],
+        [113.99034,22.59792],
+        [113.99037,22.59852],
+        [113.99041,22.59875],
+        [113.99045,22.59889],
+        [113.99053,22.59900],
+        [113.99060,22.59907],
+        [113.99082,22.59920],
+        [113.99153,22.59959],//科研楼
+        [113.99172,22.59977],
+        [113.99187,22.60000],
+        [113.99197,22.60025],
+        [113.99202,22.60045],
+        [113.99199,22.60082],
+        [113.99190,22.60110],
+        [113.99176,22.60136],
+        [113.99152,22.60161],
+        [113.99074,22.60229],
+        [113.99040,22.60261],
+        [113.99031,22.60280],
+        [113.99026,22.60304],
+        [113.99021,22.60337]//工学院
+    ];
+
+    // 创建 GeoJSON 对象
+    var geojson_bus_line_1 = {
+        type: 'FeatureCollection',
+        features: [
+            {
+                type: 'Feature',
+                geometry: {
+                    type: 'LineString',
+                    coordinates: coordinatesArray_bus_line_1
+                },
+                properties: {}
+            }
+        ]
+    };
+
+    map.on('load', function () {
+        // 添加数据源和图层
+        map.addSource('bus_line_1', {
+            type: 'geojson',
+            data: geojson_bus_line_1
+        });
+
+        map.addLayer({
+            id: 'bus_line_1_1',
+            type: 'line',
+            source: 'bus_line_1',
+            layout: {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            paint: {
+                'line-color': '#000000',
+                'line-width': 8
+            }
+        });
+        map.addLayer({
+            id: 'bus_line_1_2',
+            type: 'line',
+            source: 'bus_line_1',
+            layout: {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            paint: {
+                'line-color': '#00FFFF',
+                'line-width': 7
+            }
+        });
+    });
+
+    var coordinatesArray_bus_line_2 =[
+        [113.99742,22.61072],//欣园
+        [113.99772,22.61046],
+        [113.99787,22.61015],
+        [113.99809,22.60985],
+        [113.99842,22.60904],
+        [113.99865,22.60848],
+        [113.99879,22.60830],
+        [113.99889,22.60805],
+        [113.99887,22.60791],
+        [113.99880,22.60751],
+        [113.99875,22.60722],
+        [113.99867,22.60667],
+        [113.99867,22.60666],
+        [113.99865,22.60659],
+        [113.99842,22.60612],
+        [113.99834,22.60601],
+        [113.99830,22.60596],//慧园
+        [113.99821,22.60594],
+        [113.99796,22.60582],
+        [113.99788,22.60580],
+        [113.99779,22.60578],
+        [113.99768,22.60577],
+        [113.99743,22.60580],
+        [113.99733,22.60582],
+        [113.99668,22.60607],//创园
+        [113.99639,22.60617],
+        [113.99599,22.60632],
+        [113.99580,22.60637],
+        [113.99558,22.60639],
+        [113.99546,22.60638],
+        [113.99539,22.60637],
+        [113.99532,22.60636],
+        [113.99523,22.60634],//荔园
+        [113.99516,22.60633],
+        [113.99508,22.60630],
+        [113.99491,22.60625],
+        [113.99471,22.60617],
+        [113.99381,22.60563],
+        [113.99365,22.60555],
+        [113.99346,22.60547],
+        [113.99366,22.60512],
+        [113.99387,22.60472],//学生宿舍
+        [113.99393,22.60460],
+        [113.99420,22.60424],
+        [113.99394,22.60377],
+        [113.99387,22.60369],
+        [113.99376,22.60364],
+        [113.99298,22.60349],
+        [113.99280,22.60327],
+        [113.99233,22.60296],
+        [113.99233,22.60296],
+        [113.99212,22.60273],
+        [113.99197,22.60251],//工学院
+        [113.99152,22.60161],
+        [113.99176,22.60136],
+        [113.99190,22.60110],
+        [113.99199,22.60082],
+        [113.99202,22.60045],
+        [113.99197,22.60025],
+        [113.99187,22.60000],
+        [113.99172,22.59977],
+        [113.99153,22.59959]//科研楼
+    ];
+    var geojson_bus_line_2 = {
+        type: 'FeatureCollection',
+        features: [
+            {
+                type: 'Feature',
+                geometry: {
+                    type: 'LineString',
+                    coordinates: coordinatesArray_bus_line_2
+                },
+                properties: {}
+            }
+        ]
+    };
+
+    map.on('load', function () {
+        // 添加数据源和图层
+        map.addSource('bus_line_2', {
+            type: 'geojson',
+            data: geojson_bus_line_2
+        });
+
+        map.addLayer({
+            id: 'bus_line_2_1',
+            type: 'line',
+            source: 'bus_line_2',
+            layout: {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            paint: {
+                'line-color': '#000000',
+                'line-width': 5
+            }
+        });
+        map.addLayer({
+            id: 'bus_line_2_2',
+            type: 'line',
+            source: 'bus_line_2',
+            layout: {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            paint: {
+                'line-color': '#FFF333',
+                'line-width': 4
+            }
+        });
+    });
+
+
+
+
+
+    map.on('load', function () {
+        // 添加数据源和图层
+        map.addSource('road_out', {
+            type: 'geojson',
+            data: geojson
+        });
+
+        map.addLayer({
+            id: 'road_out_2',
+            type: 'line',
+            source: 'road_out',
+            layout: {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            paint: {
+                'line-color': '#000000',
+                'line-width': 8
+            }
+        });
+        map.addLayer({
+            id: 'road_out',
+            type: 'line',
+            source: 'road_out',
+            layout: {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            paint: {
+                'line-color': '#FF0000',
+                'line-width': 7
+            }
+        });
+    });
+
+    map.on('load', function () {
+        // 添加数据源和图层
+        map.addSource('road_out_1', {
+            type: 'geojson',
+            data: geojson
+        });
+
+        map.addLayer({
+            id: 'road_out_3',
+            type: 'line',
+            source: 'road_out_1',
+            layout: {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            paint: {
+                'line-color': '#000000',
+                'line-width': 8
+            }
+        });
+        map.addLayer({
+            id: 'road_out_4',
+            type: 'line',
+            source: 'road_out_1',
+            layout: {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            paint: {
+                'line-color': '#FF0000',
+                'line-width': 7
+            }
+        });
+    });
+
+    map.on('load', function () {
+        // 添加数据源和图层
+        map.addSource('road_out_2', {
+            type: 'geojson',
+            data: geojson
+        });
+
+        map.addLayer({
+            id: 'road_out_6',
+            type: 'line',
+            source: 'road_out_2',
+            layout: {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            paint: {
+                'line-color': '#000000',
+                'line-width': 8
+            }
+        });
+        map.addLayer({
+            id: 'road_out_7',
+            type: 'line',
+            source: 'road_out_2',
+            layout: {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            paint: {
+                'line-color': '#9999ff',
+                'line-width': 7
+            }
+        });
+    });
+
+
+    map.on('load', function() {
+        var coordinates = null
+        //显示经纬度（调试用）
+        map.on('click', function(e) {
+            // 获取点击位置的经纬度坐标
+            coordinates = e.lngLat;
+
+            // 创建一个弹出窗口并设置其内容为经纬度坐标
+            new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                //.setHTML('经度: ' + coordinates.lng.toFixed(5) + '<br>纬度: ' + coordinates.lat.toFixed(5))
+                //.setHTML('坐标'+coordinates.lng.toFixed(5) + ',' + coordinates.lat.toFixed(5))
+                .setHTML(`
+            <p>坐标:${coordinates.lng.toFixed(5)},${coordinates.lat.toFixed(5)}</p>
+            <br>
+            <input type="button" value="From Here" onclick="from_here(${coordinates.lng.toFixed(5)},${coordinates.lat.toFixed(5)})">
+            <input type="button" value="To Here" onclick="to_here(${coordinates.lng.toFixed(5)},${coordinates.lat.toFixed(5)})">
+            <br>
+            <input type="button" value="Select Station Near" onclick="to_station(${coordinates.lng.toFixed(5)},${coordinates.lat.toFixed(5)})">
+        `)
+                .addTo(map);
+        });
+
+        map.on('click', function(e) {
+            // 检查是否点击了特定的图层
+            var features = map.queryRenderedFeatures(e.point, {
+                layers: ['hupancanting', 'zhongxincanting'] // 使用图层ID数组
+            });
+
+            if (features.length) {
+                var layerId = features[0].layer.id;
+                var url = 'https://www.sustech.edu.cn/zh/about.html';
+
+                // 根据点击的图层ID添加锚点到URL
+                if (layerId === 'hupancanting') {
+                    url += '#section-hupancanting';
+                } else if (layerId === 'zhongxincanting') {
+                    url += '#section-hupancanting2';
+                }
+
+                window.open(url, '_blank');
+            }
+        });
+
+
+
+
+
+        document.getElementById('go_go_go').addEventListener('click', function() {
+            var start_1 = Number(document.getElementById('start_longitude').value);
+            var start_2 = Number(document.getElementById('start_latitude').value);
+            var end_1 = Number(document.getElementById('end_longitude').value);
+            var end_2 = Number(document.getElementById('end_latitude').value);
+            console.log('start:'+start_1 + ', '+ start_2)
+            console.log('end:'+end_1 + ', '+ end_2)
+            var point_car_in = shortestCar_point_search([start_1,start_2])
+            var point_car_out = shortestCar_point_search([end_1,end_2])
+
+
+            if (start_1 * start_2 * end_1 * end_2 !== 0) {
+                var out_list_in = forward_walk(start_1,start_2,point_car_in[0],point_car_in[1])
+                console.log(out_list_in)
+                var out_list_out = forward_walk(point_car_out[0],point_car_out[1],end_1,end_2)
+                console.log(out_list_out)
+                var out_list = forward_car(point_car_in[0],point_car_in[1],point_car_out[0],point_car_out[1]);
+                console.log(out_list);
+                //console.log(coordinatesArray);
+                map.getSource('road_out').setData({
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: out_list_in
+                    },
+                })
+
+                map.getSource('road_out_1').setData({
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: out_list_out
+                    },
+                })
+
+                map.getSource('road_out_2').setData({
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: out_list
+                    },
+                })
+
+                map.getSource('iconImage_2').setData({
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [start_1,start_2]
+                    }
+                });
+                map.getSource('iconImage_1').setData({
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [end_1,end_2]
+                    }
+                });
+
+
+
+            } else {
+                alert('无效导航');
+            }
+
+        });
+
+        document.getElementById('walk_walk_walk').addEventListener('click', function() {
+            var out_clear = [];
+            map.getSource('road_out_1').setData({
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                    type: 'LineString',
+                    coordinates: out_clear
+                },
+            })
+            map.getSource('road_out_2').setData({
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                    type: 'LineString',
+                    coordinates: out_clear
+                },
+            })
+            var start_1 = Number(document.getElementById('start_longitude').value);
+            var start_2 = Number(document.getElementById('start_latitude').value);
+            var end_1 = Number(document.getElementById('end_longitude').value);
+            var end_2 = Number(document.getElementById('end_latitude').value);
+            console.log('start:'+start_1 + ', '+ start_2)
+            console.log('end:'+end_1 + ', '+ end_2)
+
+            if (start_1 * start_2 * end_1 * end_2 !== 0) {
+                var out_list = forward_walk(start_1,start_2,end_1,end_2);
+                console.log(out_list);
+                //console.log(coordinatesArray);
+                map.getSource('road_out').setData({
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: out_list
+                    },
+                })
+
+                map.getSource('iconImage_2').setData({
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [start_1,start_2]
+                    }
+                });
+                map.getSource('iconImage_1').setData({
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [end_1,end_2]
+                    }
+                });
+
+
+
+            } else {
+                alert('无效导航');
+            }
+
+        });
+
+        document.getElementById('clear_go').addEventListener('click', function() {
+            var out_clear = [];
+            map.getSource('road_out').setData({
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                    type: 'LineString',
+                    coordinates: out_clear
+                },
+            })
+            map.getSource('road_out_1').setData({
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                    type: 'LineString',
+                    coordinates: out_clear
+                },
+            })
+            map.getSource('road_out_2').setData({
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                    type: 'LineString',
+                    coordinates: out_clear
+                },
+            })
+
+            map.getSource('iconImage_2').setData({
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [,]
+                }
+            });
+            map.getSource('iconImage_1').setData({
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [,]
+                }
+            });
+        });
+
+
+        document.getElementById('update_bus').addEventListener('click', function() {
+            let list = [];
+            let list_all = [];
+
+            let bodyObj_1 = document.getElementById("tbody_1");
+            let bodyObj = document.getElementById("tbody");
+
+            if (!bodyObj) {
+                alert("Body of Table not Exist!");
+                return;
+            }
+            if (!bodyObj_1) {
+                alert("Body of Table not Exist!");
+                return;
+            }
+
+            let row_count = bodyObj.rows.length;
+            let row_count_1 = bodyObj_1.rows.length;
+
+            for (let i = 1; i < row_count; i++) {
+                let log = Number(document.getElementById("tbody").rows[i].cells[2].innerHTML)
+                let lat = Number(document.getElementById("tbody").rows[i].cells[3].innerHTML)
+                list.push([log, lat])
+                list_all.push([log,lat])
+            }
+
+            for (let i = 1; i < row_count_1; i++) {
+                let log = Number(document.getElementById("tbody_1").rows[i].cells[2].innerHTML)
+                let lat = Number(document.getElementById("tbody_1").rows[i].cells[3].innerHTML)
+                list_all.push([log,lat])
+            }
+
+            let features = [];
+            console.log(list)
+
+            for (let i = 0; i < list_all.length; i++) {
+                features.push({
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": list_all[i]
+                    }
+                })
+            }
+            map.getSource('iconImage').setData({
+                type: 'FeatureCollection',
+                features
+            });
+            let line_list = [];
+
+            if(list.length !== 0){
+                line_list.push([list[0][0], list[0][1]]);
+            }
+
+
+            for (let i = 0; i < list.length-1; i++) {
+                let list_tmp = forward_car(list[i][0], list[i][1], list[i+1][0], list[i+1][1]);
+                console.log(list_tmp);
+                for (let j = 1; j < list_tmp.length; j++) {
+                    line_list.push([list_tmp[j][0], list_tmp[j][1]])
+                }
+            }
+            console.log(line_list)
+            map.getSource('bus_line_1').setData({
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                    type: 'LineString',
+                    coordinates: line_list
+                },
+            })
+
+
+        });
+
+        document.getElementById('bus_line_hide').addEventListener('click', function() {
+            map.setLayoutProperty('bus_line_1_1','visibility','none');
+            map.setLayoutProperty('bus_line_1_2','visibility','none');
+        });
+
+        document.getElementById('bus_line_unhide').addEventListener('click', function() {
+            map.setLayoutProperty('bus_line_1_1','visibility','visible');
+            map.setLayoutProperty('bus_line_1_2','visibility','visible');
+        });
+
+
+
+        document.getElementById('update_bus_1').addEventListener('click', function() {
+            let list = [];
+            let list_all = [];
+
+            let bodyObj = document.getElementById("tbody_1");
+            let bodyObj_1 = document.getElementById("tbody");
+            if (!bodyObj) {
+                alert("Body of Table not Exist!");
+                return;
+            }
+            if (!bodyObj_1) {
+                alert("Body of Table not Exist!");
+                return;
+            }
+
+            let row_count = bodyObj.rows.length;
+            for (let i = 1; i < row_count; i++) {
+                let log = Number(document.getElementById("tbody_1").rows[i].cells[2].innerHTML)
+                let lat = Number(document.getElementById("tbody_1").rows[i].cells[3].innerHTML)
+                list.push([log, lat])
+                list_all.push([log, lat])
+            }
+
+            let row_count_1 = bodyObj_1.rows.length;
+            for (let i = 1; i < row_count_1; i++) {
+                let log = Number(document.getElementById("tbody").rows[i].cells[2].innerHTML)
+                let lat = Number(document.getElementById("tbody").rows[i].cells[3].innerHTML)
+                list_all.push([log, lat])
+            }
+            let features = [];
+            console.log(list)
+
+            for (let i = 0; i < list_all.length; i++) {
+                features.push({
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": list_all[i]
+                    }
+                })
+            }
+            map.getSource('iconImage').setData({
+                type: 'FeatureCollection',
+                features
+            });
+            let line_list = [];
+
+            if(list.length !== 0){
+                line_list.push([list[0][0], list[0][1]]);
+            }
+
+
+            for (let i = 0; i < list.length-1; i++) {
+                let list_tmp = forward_car(list[i][0], list[i][1], list[i+1][0], list[i+1][1]);
+                console.log(list_tmp);
+                for (let j = 1; j < list_tmp.length; j++) {
+                    line_list.push([list_tmp[j][0], list_tmp[j][1]])
+                }
+            }
+            console.log(line_list)
+            map.getSource('bus_line_2').setData({
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                    type: 'LineString',
+                    coordinates: line_list
+                },
+            })
+
+
+        });
+
+        document.getElementById('bus_line_hide_1').addEventListener('click', function() {
+            map.setLayoutProperty('bus_line_2_1','visibility','none');
+            map.setLayoutProperty('bus_line_2_2','visibility','none');
+        });
+
+        document.getElementById('bus_line_unhide_1').addEventListener('click', function() {
+            map.setLayoutProperty('bus_line_2_1','visibility','visible');
+            map.setLayoutProperty('bus_line_2_2','visibility','visible');
+        });
+
+
+
+
+
+
+
+        map.loadImage('https://s1.aigei.com/src/img/png/b3/b3eb99783d7c4d8ab31f31c84ce31a13.png?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/&e=1735488000&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:yPDVSIQSxBGX8RJt63Z6nakAUjk=', (error, image) => {
+            if (error) throw error;
+            map.addImage('iconImage_2', image);
+            // 图标位置坐标
+            let point_set = [
+            ]
+
+            let features = [];
+
+            for (let i = 0; i < point_set.length; i++) {
+                features.push({
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": point_set[i]
+                    }
+                })
+            }
+
+            map.addSource('iconImage_2', {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features
+                }
+            });
+            map.addLayer({
+                id: "iconImage_2",
+                type: "symbol",
+                source: 'iconImage_2', // 对应addSource第一个参数名字
+                layout: {
+                    "icon-image": "iconImage_2", // 对应addImage()第一个参数名字
+                    "icon-size": 0.14,//图标的大小
+                },
+            })
+        });
+
+        map.loadImage('https://s1.4sai.com/src/img/png/a2/a2895e41aac54f69b0ec3bbcfcdb8534.png?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/&e=1735488000&token=1srnZGLKZ0Aqlz6dk7yF4SkiYf4eP-YrEOdM1sob:2lRrKeB_t9hWQ9H8xqOZ1G66Tkw=', (error, image) => {
+            if (error) throw error;
+            map.addImage('iconImage_1', image);
+
+            // 图标位置坐标
+            let point_set = [
+            ]
+
+            let features = [];
+
+            for (let i = 0; i < point_set.length; i++) {
+                features.push({
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": point_set[i]
+                    }
+                })
+            }
+
+            map.addSource('iconImage_1', {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features
+                }
+            });
+
+
+            // 增加图片
+            map.addLayer({
+                id: "iconImage_1",
+                type: "symbol",
+                source: 'iconImage_1', // 对应addSource第一个参数名字
+                layout: {
+                    "icon-image": "iconImage_1", // 对应addImage()第一个参数名字
+                    "icon-size": 0.14,//图标的大小
+                },
+            })
+        })
+
+
+
+
+        map.loadImage('https://s1.aigei.com/src/img/png/d9/d9dd2da5c21644b2825b3cab49368e07.png?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/&e=1735488000&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:FB0vmJKdCxu2zNEPe3FF6cycUCQ=', (error, image) => {
+            if (error) throw error;
+            map.addImage('iconImage', image);
+
+            // 图标位置坐标
+            let point_set = [
+                [113.99742,22.61072],//欣园
+                [113.99830,22.60596],//慧园
+                [113.99668,22.60607],//创园
+                [113.99523,22.60634],//荔园
+                [113.99387,22.60472],//学生宿舍
+                [113.99561,22.60290],//社康中心
+                [113.99773,22.60329],//教工餐厅
+                [113.99835,22.60189],//专家公寓
+                [113.99845,22.60025],//三号门
+                [113.99586,22.59781],//二号门
+                [113.99440,22.59609],//一号门（1）
+                [113.99241,22.59703],//行政楼
+                [113.99036,22.59711],//七号门
+                [113.99153,22.59959],//科研楼
+                [113.99021,22.60337],//工学院
+                [113.99224,22.60286]//工学院(2)
+            ]
+
+            let features = [];
+
+            for (let i = 0; i < point_set.length; i++) {
+                features.push({
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": point_set[i]
+                    }
+                })
+            }
+
+            map.addSource('iconImage', {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features
+                }
+            });
+
+
+            // 增加图片
+            map.addLayer({
+                id: "iconImage",
+                type: "symbol",
+                source: 'iconImage', // 对应addSource第一个参数名字
+                layout: {
+                    "icon-image": "iconImage", // 对应addImage()第一个参数名字
+                    "icon-size": 0.14,//图标的大小
+                },
+            })
+        })
+
+
+
+
+
+
+        /*var markers_bus =[
+            {coordinates: [113.99742,22.61072], color: '#33FF33'},//欣园
+            {coordinates: [113.99830,22.60596], color: '#33FF33'},//慧园
+            {coordinates: [113.99668,22.60607], color: '#33FF33'},//创园
+            {coordinates: [113.99523,22.60634], color: '#33FF33'},//荔园
+            {coordinates: [113.99387,22.60472], color: '#33FF33'},//学生宿舍
+            {coordinates: [113.99561,22.60290], color: '#FF9900'},//社康中心
+            {coordinates: [113.99773,22.60329], color: '#FF9900'},//教工餐厅
+            {coordinates: [113.99835,22.60189], color: '#FF9900'},//专家公寓
+            {coordinates: [113.99845,22.60025], color: '#FF9900'},//三号门
+            {coordinates: [113.99586,22.59781], color: '#FF9900'},//二号门
+            {coordinates: [113.99440,22.59609], color: '#FF9900'},//一号门（1）
+            {coordinates: [113.99241,22.59703], color: '#FF9900'},//行政楼
+            {coordinates: [113.99036,22.59711], color: '#FF9900'},//七号门
+            {coordinates: [113.99153,22.59959], color: '#33FF33'},//科研楼
+            {coordinates: [113.99021,22.60337], color: '#FF9900'},//工学院
+            {coordinates: [113.99197,22.60251], color: '#6666FF'}//工学院(2)
+        ]
+
+        markers_bus.forEach(markers_bus => {
+            new mapboxgl.Marker({ color: markers_bus.color })
+                .setLngLat(markers_bus.coordinates)
+                .addTo(map);
+        });
+         */
+
+
+
+
+//TeachingBuilding
+        map.addLayer(Layer1_1);
+        map.addLayer(Layer1_2);
+        map.addLayer(Layer1_3);
+        map.addSource('label1_1', Source1_1);
+        map.addLayer(Layer1_1_L)
+        map.addSource('label1_2', Source1_2);
+        map.addLayer(Layer1_2_L)
+        map.addSource('label1_3', Source1_3);
+        map.addLayer(Layer1_3_L)
+
+
+//Dormitory
+        map.addLayer(Layer2_1);
+        map.addLayer(Layer2_2);
+        map.addLayer(Layer2_3);
+        map.addLayer(Layer2_4);
+        map.addLayer(Layer2_5);
+        map.addLayer(Layer2_6);
+        map.addLayer(Layer2_7);
+        map.addLayer(Layer2_8);
+        map.addLayer(Layer2_9);
+        map.addLayer(Layer2_10);
+        map.addLayer(Layer2_11);
+        map.addLayer(Layer2_12);
+        map.addLayer(Layer2_13);
+        map.addLayer(Layer2_14);
+        map.addLayer(Layer2_15);
+        map.addLayer(Layer2_16);
+        map.addLayer(Layer2_17);
+        map.addLayer(Layer2_18);
+        map.addLayer(Layer2_19);
+
+
+        map.addSource('label2_1', Source2_1);
+        map.addLayer(Layer2_1_L)
+        map.addSource('label2_2', Source2_2);
+        map.addLayer(Layer2_2_L)
+        map.addSource('label2_3', Source2_3);
+        map.addLayer(Layer2_3_L)
+//Canteen
+        map.addLayer(Layer3_1);
+        map.addLayer(Layer3_2);
+        map.addLayer(Layer3_3);
+        map.addLayer(Layer3_4_1);
+        map.addLayer(Layer3_4_2);
+        map.addLayer(Layer3_4_3);
+        map.addLayer(Layer3_5);
+        map.addLayer(Layer3_6);
+        map.addLayer(Layer3_7);
+        map.addLayer(Layer3_8);
+        map.addLayer(Layer3_9);
+
+        map.addSource('label3_1', Source3_1);
+        map.addLayer(Layer3_1_L)
+        map.addSource('label3_2', Source3_2);
+        map.addLayer(Layer3_2_L)
+        map.addSource('label3_3', Source3_3);
+        map.addLayer(Layer3_3_L)
+        map.addSource('label3_4', Source3_4);
+        map.addLayer(Layer3_4_L)
+        map.addSource('label3_5', Source3_5);
+        map.addLayer(Layer3_5_L)
+        map.addSource('label3_6', Source3_6);
+        map.addLayer(Layer3_6_L)
+        map.addSource('label3_7', Source3_7);
+        map.addLayer(Layer3_7_L)
+        map.addSource('label3_8', Source3_8);
+        map.addLayer(Layer3_8_L)
+        map.addSource('label3_9', Source3_9);
+        map.addLayer(Layer3_9_L)
+
+//College
+        map.addLayer(Layer4_1);
+        map.addLayer(Layer4_2);
+        map.addLayer(Layer4_3);
+        map.addLayer(Layer4_4);
+        map.addLayer(Layer4_5);
+        map.addLayer(Layer4_6);
+        map.addLayer(Layer4_7);
+        map.addLayer(Layer4_8);
+        map.addLayer(Layer4_9);
+
+        map.addSource('label4_1', Source4_1);
+        map.addLayer(Layer4_1_L)
+        map.addSource('label4_2', Source4_2);
+        map.addLayer(Layer4_2_L)
+        map.addSource('label4_3', Source4_3);
+        map.addLayer(Layer4_3_L)
+        map.addSource('label4_4', Source4_4);
+        map.addLayer(Layer4_4_L)
+        map.addSource('label4_5', Source4_5);
+        map.addLayer(Layer4_5_L)
+        map.addSource('label4_6', Source4_6);
+        map.addLayer(Layer4_6_L)
+        map.addSource('label4_7', Source4_7);
+        map.addLayer(Layer4_7_L)
+        map.addSource('label4_8', Source4_8);
+        map.addLayer(Layer4_8_L)
+        map.addSource('label4_9', Source4_9);
+        map.addLayer(Layer4_9_L)
+//Gym
+        map.addLayer(Layer5_1);
+        map.addLayer(Layer5_2);
+        map.addLayer(Layer5_3);
+        map.addLayer(Layer5_4);
+        map.addLayer(Layer5_5);
+        map.addLayer(Layer5_6);
+        map.addSource('label5_1', Source5_1);
+        map.addLayer(Layer5_1_L)
+        map.addSource('label5_2', Source5_2);
+        map.addLayer(Layer5_2_L)
+        map.addSource('label5_3', Source5_3);
+        map.addLayer(Layer5_3_L)
+        map.addSource('label5_4', Source5_4);
+        map.addLayer(Layer5_4_L)
+        map.addSource('label5_5', Source5_5);
+        map.addLayer(Layer5_5_L)
+        map.addSource('label5_6', Source5_6);
+        map.addLayer(Layer5_6_L)
+
+
+//Library
+        map.addLayer(Layer6_1);
+        map.addLayer(Layer6_2);
+        map.addLayer(Layer6_3);
+        map.addSource('label6_1', Source6_1);
+        map.addLayer(Layer6_1_L)
+        map.addSource('label6_2', Source6_2);
+        map.addLayer(Layer6_2_L)
+        map.addSource('label6_3', Source6_3);
+        map.addLayer(Layer6_3_L)
+
+
+//Other
+
+        map.addLayer(Layer7_1);
+        map.addLayer(Layer7_2);
+        map.addLayer(Layer7_3);
+        map.addLayer(Layer7_4);
+        map.addLayer(Layer7_5);
+        map.addLayer(Layer7_6);
+        map.addLayer(Layer7_7);
+        map.addLayer(Layer7_8);
+
+        map.addSource('label7_1', Source7_1);
+        map.addLayer(Layer7_1_L)
+        map.addSource('label7_2', Source7_2);
+        map.addLayer(Layer7_2_L)
+        map.addSource('label7_3', Source7_3);
+        map.addLayer(Layer7_3_L)
+        map.addSource('label7_4', Source7_4);
+        map.addLayer(Layer7_4_L)
+        map.addSource('label7_5', Source7_5);
+        map.addLayer(Layer7_5_L)
+        map.addSource('label7_6', Source7_6);
+        map.addLayer(Layer7_6_L)
+        map.addSource('label7_7', Source7_7);
+        map.addLayer(Layer7_7_L)
+        map.addSource('label7_8', Source7_8);
+        map.addLayer(Layer7_8_L)
+//bus_line
+        /*
+        //map.addLayer(Layer_busline_1);
+        //map.addLayer(Layer_busline_2);
+        map.addLayer(Layer_road_1);
+        map.addLayer(Layer_road_2);
+        map.addLayer(Layer_road_3);
+        map.addLayer(Layer_road_4);
+        map.addLayer(Layer_road_5);
+        //map.addLayer(Layer_road_out);
+        */
+
+        updateZoomLevel();
+
+
+
+    });
+
+
+
+
+
+    // 点击事件监听器
+    map.on('click', function(e) {
+        // 检查是否点击了特定的图层
+        var features = map.queryRenderedFeatures(e.point, {
+            layers: ['1jiao','2jiao','3jiao','jiuhuajingshe','jiaoshigongyu','xueshengsushe','xueshengsushe4','xueshengsushe5','xueshengsushe6','xueshengsushe7',
+                'xueshengsushe9' ,'xueshengsushe8','xueshengsushe9','xueshengsushe10','xueshengsushe11','xueshengsushe12'
+                ,'xueshengsushe13','xueshengsushe14','xueshengsushe15','xueshengsushe16','xueshengsushe17','xueshengsushe18','xueshengsushe19',
+                'hupancanting','zhongxincanting','jiudongcanting','maixiangwu','xicanting','jiaogongcanting','tianhongchaoshi'
+                ,'hupanchaoshi','liyuancanting','liyuanchaoshi','xinyuancanting','renwenshekexueyuan','lixueyuan1','lixueyuan2',
+                'dierkeyanlou','diyikeyanlou','lixueyuan3','shangxueyuan','gongxueyuanbei','gongxueyuannan','fengyucaochang'
+                ,'songhetianjingchang','runyangtiyuguan','bangqiuchang','lanqiuchang','zuqiuchang','yidantushuguan','linentushuguan','hanyongtushuguan',
+                'xingzhenglou' ,'jiancezhongxin','huiyizhongxin','bangonglou','liyuan','huiyuan','chuangyuan','xinyuan'] // 添加更多图层ID
+        });
+
+        if (features.length) {
+            var layerId = features[0].layer.id;
+            var baseUrl = '';
+            var anchor = '';
+            // 根据点击的图层ID确定锚点
+            if (layerId === '1jiao' || layerId === '2jiao' || layerId === '3jiao') {//1
+                baseUrl = 'https://aplacalike9050.github.io/CS309/HTML/Intro/TechingBuilding.html'
+                if (layerId === '1jiao') {
+                    anchor = '#section1';
+                } else if (layerId === '2jiao') {
+                    anchor = '#section2';
+                } else if (layerId === '3jiao') {
+                    anchor = '#section3';
+                }
+            }
+
+            else if (layerId === 'jiuhuajingshe' || layerId === 'jiaoshigongyu' || layerId === 'xueshengsushe'
+                || layerId === 'xueshengsushe4' || layerId === 'xueshengsushe5' || layerId === 'xueshengsushe6' || layerId === 'xueshengsushe7'
+                || layerId === 'xueshengsushe8' || layerId === 'xueshengsushe9' || layerId === 'xueshengsushe10' || layerId === 'xueshengsushe11'
+                || layerId === 'xueshengsushe12' || layerId === 'xueshengsushe13' || layerId === 'xueshengsushe14' || layerId === 'xueshengsushe15'
+                || layerId === 'xueshengsushe16' || layerId === 'xueshengsushe17' || layerId === 'xueshengsushe18' || layerId === 'xueshengsushe19') {//2
+                baseUrl = 'https://aplacalike9050.github.io/CS309/HTML/Intro/Dormitory.html'
+                if (layerId === 'jiuhuajingshe') {
+                    anchor = '#section1';
+                } else if (layerId === 'jiaoshigongyu') {
+                    anchor = '#section2';
+                } else if (layerId === layerId === 'xueshengsushe'
+                    || layerId === 'xueshengsushe4' || layerId === 'xueshengsushe5' || layerId === 'xueshengsushe6' || layerId === 'xueshengsushe7'
+                    || layerId === 'xueshengsushe8' || layerId === 'xueshengsushe9' || layerId === 'xueshengsushe10' || layerId === 'xueshengsushe11'
+                    || layerId === 'xueshengsushe12' || layerId === 'xueshengsushe13' || layerId === 'xueshengsushe14' || layerId === 'xueshengsushe15'
+                    || layerId === 'xueshengsushe16' || layerId === 'xueshengsushe17' || layerId === 'xueshengsushe18' || layerId === 'xueshengsushe19') {
+                    anchor = '#section3';
+                }
+            }
+
+            else if (layerId === 'hupancanting' || layerId === 'zhongxincanting' || layerId === 'jiudongcanting' || layerId === 'maixiangwu'
+                || layerId === 'xicanting' || layerId === 'jiaogongcanting' || layerId === 'tianhongchaoshi'
+                || layerId === 'hupanchaoshi' || layerId === 'liyuancanting' || layerId === 'liyuanchaoshi' || layerId === 'xinyuancanting') {//3
+                baseUrl = 'https://aplacalike9050.github.io/CS309/HTML/Intro/Canteen.html'
+                if (layerId === 'hupancanting') {
+                    anchor = '#section2';
+                } else if (layerId === 'zhongxincanting') {
+                    anchor = '#section1';
+                } else if (layerId === 'jiudongcanting') {
+                    anchor = '#section3';
+                }else if (layerId === 'maixiangwu') {
+                    anchor = '#section4';
+                } else if (layerId === 'xicanting') {
+                    anchor = '#section4';
+                } else if (layerId === 'jiaogongcanting') {
+                    anchor = '#section4';
+                }else if (layerId === 'tianhongchaoshi') {
+                    anchor = '#section7';
+                } else if (layerId === 'hupanchaoshi') {
+                    anchor = '#section8';
+                } else if (layerId === 'liyuancanting') {
+                    anchor = '#section5';
+                }else if (layerId === 'liyuanchaoshi') {
+                    anchor = '#section9';
+                } else if (layerId === 'xinyuancanting') {
+                    anchor = '#section6';
+                }
+
+            }
+
+            else if (layerId === 'renwenshekexueyuan' || layerId === 'lixueyuan1' || layerId === 'lixueyuan2'
+                || layerId === 'dierkeyanlou' || layerId === 'diyikeyanlou' ||
+                layerId === 'lixueyuan3' || layerId === 'shangxueyuan' || layerId === 'gongxueyuanbei' ||
+                layerId === 'gongxueyuannan') {//4
+                baseUrl = 'https://aplacalike9050.github.io/CS309/HTML/Intro/College.html'
+                if (layerId === 'renwenshekexueyuan') {
+                    anchor = '#section9';
+                } else if (layerId === 'dierkeyanlou') {
+                    anchor = '#section5';
+                } else if (layerId === 'diyikeyanlou') {
+                    anchor = '#section4';
+                } else if (layerId === 'lixueyuan3') {
+                    anchor = '#section1';
+                }else if (layerId === 'lixueyuan1') {
+                    anchor = '#section3';
+                }else if (layerId === 'lixueyuan2') {
+                    anchor = '#section3';
+                } else if (layerId === 'shangxueyuan') {
+                    anchor = '#section6';
+                } else if (layerId === 'gongxueyuanbei') {
+                    anchor = '#section7';
+                } else if (layerId === 'gongxueyuannan') {
+                    anchor = '#section8';
+                }
+            }
+
+            else if (layerId === 'fengyucaochang' || layerId === 'songhetianjingchang' ||
+                layerId === 'runyangtiyuguan' || layerId === 'bangqiuchang' ||
+                layerId === 'lanqiuchang' || layerId === 'zuqiuchang') {//5
+                baseUrl = 'https://aplacalike9050.github.io/CS309/HTML/Intro/Gym.html'
+                if (layerId === 'fengyucaochang') {
+                    anchor = '#section1';
+                } else if (layerId === 'songhetianjingchang') {
+                    anchor = '#section2';
+                } else if (layerId === 'runyangtiyuguan') {
+                    anchor = '#section3';
+                } else if (layerId === 'bangqiuchang') {
+                    anchor = '#section4';
+                } else if (layerId === 'lanqiuchang') {
+                    anchor = '#section5';
+                } else if (layerId === 'zuqiuchang') {
+                    anchor = '#section6';
+                }
+            }
+
+            else if (layerId === 'yidantushuguan' || layerId === 'linentushuguan' || layerId === 'hanyongtushuguan') {//6
+                baseUrl = 'https://aplacalike9050.github.io/CS309/HTML/Intro/Library.html'
+                if (layerId === 'yidantushuguan') {
+                    anchor = '#section1';
+                } else if (layerId === 'linentushuguan') {
+                    anchor = '#section2';
+                } else if (layerId === 'hanyongtushuguan') {
+                    anchor = '#section3';
+                }
+            }
+
+            else if (layerId === 'xingzhenglou' || layerId === 'jiancezhongxin' || layerId === 'huiyizhongxin' ||
+                layerId === 'bangonglou' || layerId === 'liyuan' || layerId === 'huiyuan' ||
+                layerId === 'chuangyuan' || layerId === 'xinyuan') {//7
+                baseUrl = 'https://aplacalike9050.github.io/CS309/HTML/Intro/Other.html'
+                if (layerId === 'xingzhenglou') {
+                    anchor = '#section1';
+                } else if (layerId === 'jiancezhongxin') {
+                    anchor = '#section2';
+                } else if (layerId === 'huiyizhongxin') {
+                    anchor = '#section3';
+                } else if (layerId === 'bangonglou') {
+                    anchor = '#section4';
+                } else if (layerId === 'liyuan') {
+                    anchor = '#section5';
+                } else if (layerId === 'huiyuan') {
+                    anchor = '#section6';
+                }else if (layerId === 'chuangyuan') {
+                    anchor = '#section7';
+                }else if (layerId === 'xinyuan') {
+                    anchor = '#section8';
+                }
+            }
+
+            var fullUrl = baseUrl + anchor;
+            window.open(fullUrl, '_blank');
+        }
+    });
+    function updateZoomLevel() {
+        var zoomLevel = map.getZoom();
+        document.getElementById('zoom-level').innerHTML = 'Zoom Level: ' + zoomLevel.toFixed(2);
+    }
+
+    map.on('zoom', updateZoomLevel);
+
+
+
+</script>
+</body>
+</html>
